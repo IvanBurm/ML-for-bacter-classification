@@ -3,7 +3,7 @@ import sys
 import matplotlib.pyplot as plt
 import xml.etree.ElementTree as ET
 import numpy as np
-from sklearn.decomposition import PCA
+
 
 def add_to_data_array(data, mass_data, intensity_data):
         if data is None:
@@ -32,7 +32,6 @@ def search_xml(ppath):
         elif (os.path.isdir(os.path.join(ppath,q))):
             search_xml(os.path.join(ppath, q))
            
-print("START PROGRAMM")
 data = add_to_data_array(None,[],[])
 xml_file_path = []
 #go to folder with spectrum data
@@ -59,23 +58,3 @@ for i in range(len(xml_file_path)):
         data = add_to_data_array(data, m, i)
 
 data = np.delete(data, 0, axis=0)
-print(data.shape)
-
-data = data.reshape(-1,715)
-print(data.shape)
-n_comp = data.shape[0]
-pca = PCA(n_components = data.shape[0])
-pca.fit(data)
-explained = pca.explained_variance_ratio_
-print(pca.components_)
-plt.figure(figsize=(10, 6))
-plt.scatter(np.arange(1, n_comp + 1), explained)
-plt.plot(np.arange(1, n_comp + 1), explained)
-plt.title('Dependence of  variance on the number of components',size=14)
-plt.xlabel('Num of components', size=14)
-plt.ylabel('proportion of the explained variance', size=14)
-
-plt.xlim(0,1000)
-plt.show()
-
-print("END PROGRAMM")
