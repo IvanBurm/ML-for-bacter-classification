@@ -3,15 +3,24 @@ import sys
 import matplotlib.pyplot as plt
 import xml.etree.ElementTree as ET
 import numpy as np
+from sklearn.decomposition import PCA
 
-
-def add_to_data_array(data, mass_data, intensity_data):
+def add_to_data_array(data, mass_data, intensity_data,diap_mz):
+        
         if data is None:
-                data = np.zeros(18001)
+                if diap_mz == 0:
+                        data = np.zeros(5001)
+                elif diap_mz == 1:
+                        data = np.zeros(18001)
         else:
-                data = np.vstack( (data, np.zeros(18001)) )
-                for i in range(len(mass_data)):
-                        data[-1,mass_data[i]-2000] = intensity_data[i]
+                if diap_mz == 0:
+                        data = np.vstack((data, np.zeros(5001)))
+                        for i in range(len(mass_data)):
+                                data[-1,mass_data[i]] = intensity_data[i]
+                elif diap_mz == 1:
+                        data = np.vstack( (data, np.zeros(18001)) )
+                        for i in range(len(mass_data)):
+                                data[-1,mass_data[i]-2000] = intensity_data[i]
         return data
 
 def xmlFileRead(file_path):
@@ -31,11 +40,19 @@ def search_xml(ppath):
             xml_file_path.append(os.path.join(ppath, q))
         elif (os.path.isdir(os.path.join(ppath,q))):
             search_xml(os.path.join(ppath, q))
-           
-data = add_to_data_array(None,[],[])
-xml_file_path = []
+
+
+print('Input path to spectrum data')
+path_to_data = input()
+#path_to_data = 'D:/Machine Learning for MALDI-TOF spectrum/MALDI-spectrum_november 2022/26_08_2022/High mass_pos ions_after bl subtract'
 #go to folder with spectrum data
-os.chdir('D:/Machine Learning for MALDI-TOF spectrum/MALDI-spectrum_november 2022/26_08_2022/High mass_pos ions_after bl subtract')
+os.chdir(path_to_data)
+d_mz = 1
+#create data array
+data = add_to_data_array(None,[],[],d_mz)
+xml_file_path = []
+
+
 #search peaklists in folder-tree 
 for name_of_folder in os.listdir(path='.'):
     if os.path.isdir('./'+name_of_folder):
@@ -55,6 +72,10 @@ for i in range(len(xml_file_path)):
         else:
                 class_label[i] = class_label[i-1]
         m,i = xmlFileRead(ppath)
-        data = add_to_data_array(data, m, i)
+        data = add_to_data_array(data, m, i, d_mz)
 
 data = np.delete(data, 0, axis=0)
+print(data.shape)
+
+
+print("END PROGRAMM")
