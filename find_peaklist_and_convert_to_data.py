@@ -1,9 +1,7 @@
 import os
 import sys
-import matplotlib.pyplot as plt
 import xml.etree.ElementTree as ET
 import numpy as np
-from sklearn.decomposition import PCA
 
 def add_to_data_array(data, mass_data, intensity_data,diap_mz):
         
@@ -43,8 +41,8 @@ def search_xml(ppath):
 
 
 print('Input path to spectrum data')
-path_to_data = input()
-#path_to_data = 'D:/Machine Learning for MALDI-TOF spectrum/MALDI-spectrum_november 2022/26_08_2022/High mass_pos ions_after bl subtract'
+#path_to_data = input()
+path_to_data = 'D:/Machine Learning for MALDI-TOF spectrum/MALDI-spectrum_november 2022/26_08_2022/High mass_pos ions_after bl subtract'
 #go to folder with spectrum data
 os.chdir(path_to_data)
 d_mz = 1
@@ -74,8 +72,7 @@ for i in range(len(xml_file_path)):
         m,i = xmlFileRead(ppath)
         data = add_to_data_array(data, m, i, d_mz)
 
-data = np.delete(data, 0, axis=0)
-print(data.shape)
-
-
-print("END PROGRAMM")
+print(class_label)
+X = np.delete(data, 0, axis=0)
+np.save('data',X)
+np.save('class_label',class_label)
