@@ -112,7 +112,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, class_label, test_size=4,
 for size in range(1,15,2):
     X_been = conv_1d(X_train,size)
     X_been_n = normalize(X_been, axis=1, norm='l2')
-    parameters = {'kernel':['rbf'], 'C':np.logspace(-5, 5, 1), 'gamma':np.logspace(-4, 5, 10)}
+    parameters = {'kernel':['rbf'], 'C':np.logspace(-5, 5, 11), 'gamma':np.logspace(-4, 5, 10)}
     classificator = svm.SVC(decision_function_shape = 'ovo')
     clf = GridSearchCV(classificator, parameters, cv = 4)
     clf.fit(X_been_n,y_train)
