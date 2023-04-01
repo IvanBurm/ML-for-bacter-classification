@@ -107,7 +107,7 @@ for i in range(len(xml_file_path)):
 
 X = np.delete(data, 0, axis=0)
 
-X_train, X_test, y_train, y_test = train_test_split(X, class_label, test_size=4, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.15, random_state=42, stratify = Y)
 #SVM + 1Dconv
 for size in range(1,15,2):
     X_been = conv_1d(X_train,size)
